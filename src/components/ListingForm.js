@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import * as Loader from 'react-loader-spinner';
+import {Audio} from 'react-loader-spinner';
 import PropTypes from 'prop-types';
+
 
 const ListingForm = (props) => {
     const [formData, setFormData] = useState({
@@ -23,8 +24,9 @@ const ListingForm = (props) => {
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    const onSubmit = e => {
-        e.preventDefault();
+    const bhagwaan = () => {
+        // e.preventDefault();
+        console.log(formData)
 
         const config = {
             headers: {
@@ -33,20 +35,56 @@ const ListingForm = (props) => {
         };
 
         setLoading(true);
-        axios.post(`${process.env.REACT_APP_API_URL}/api/listings/search`, { sale_type, price, bedrooms, home_type, bathrooms, sqft, days_listed, has_photos, open_house, keywords }, config)
-        .then(res => {
-            setLoading(false);
-            props.setListings(res.data);
-            window.scrollTo(0, 0);
+
+        axios.post('http://127.0.0.1:8000/api/listings/search', {
+            // sale_type: "For Sale",
+            // price: "$400,000+",
+            // bedrooms: "2+",
+            // home_type: "House",
+            // bathrooms: "2+",
+            // sqft: "1000+",
+            // days_listed: "Any",
+            // has_photos: "1+",
+            // open_house: "0",
+            // keywords: ""
+            
+            sale_type: `${sale_type}`,
+            price: `${price}`,
+            bedrooms: `${bedrooms}`,
+            home_type: `${home_type}`,
+            bathrooms: `${bathrooms}`,
+            sqft: `${sqft}`,
+            days_listed: `${days_listed}`,
+            has_photos: `${has_photos}`,
+            open_house: `0`,//manually sending data as it was throwing error
+            keywords: `${keywords}`
+
         })
-        .catch(err => {
-            setLoading(false);
-            window.scrollTo(0, 0);
-        })
+            // .then(function (response) {
+            //     console.log(response);
+            // })
+            .then(res => {
+                console.log(res);
+                setLoading(false);
+                props.setListings(res.data);
+                window.scrollTo(0, 0);
+            })
+            // .catch(function (error) {
+            //     console.log(error);
+            // });
+            .catch(err => {
+                setLoading(false);
+                window.scrollTo(0, 0);
+            })
+
+
+
     };
 
+
+
     return (
-        <form className='listingform' onSubmit={e => onSubmit(e)}>
+        <form className='listingform'>
             <div className='row'>
                 <div className='col-1-of-6'>
                     <div className='listingform__section'>
@@ -56,19 +94,6 @@ const ListingForm = (props) => {
                             <option>For Rent</option>
                         </select>
                     </div>
-                    <div className='listingform__section'>
-                        <label className='listingform__label' htmlFor='sqft'>Sqft</label>
-                        <select className='listingform__select' name='sqft' onChange={e => onChange(e)} value={sqft}>
-                            <option>1000+</option>
-                            <option>1200+</option>
-                            <option>1500+</option>
-                            <option>2000+</option>
-                            <option>Any</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div className='col-1-of-6'>
                     <div className='listingform__section'>
                         <label className='listingform__label' htmlFor='price'>Minimum Price</label>
                         <select className='listingform__select' name='price' onChange={e => onChange(e)} value={price}>
@@ -84,6 +109,49 @@ const ListingForm = (props) => {
                         </select>
                     </div>
                     <div className='listingform__section'>
+                        <label className='listingform__label' htmlFor='bedrooms'>Bedrooms</label>
+                        <select className='listingform__select' name='bedrooms' onChange={e => onChange(e)} value={bedrooms}>
+                            <option>0+</option>
+                            <option>1+</option>
+                            <option>2+</option>
+                            <option>3+</option>
+                            <option>4+</option>
+                            <option>5+</option>
+                        </select>
+                    </div>
+                    <div className='listingform__section'>
+                        <label className='listingform__label' htmlFor='home_type'>Home Type</label>
+                        <select className='listingform__select' name='home_type' onChange={e => onChange(e)} value={home_type}>
+                            <option>House</option>
+                            <option>Condo</option>
+                            <option>Townhouse</option>
+                        </select>
+                    </div>
+                    <div className='listingform__section'>
+                        <label className='listingform__label' htmlFor='bathrooms'>Baths</label>
+                        <select className='listingform__select' name='bathrooms' onChange={e => onChange(e)} value={bathrooms}>
+                            <option>0+</option>
+                            <option>1+</option>
+                            <option>2+</option>
+                            <option>3+</option>
+                            <option>4+</option>
+                        </select>
+                    </div>
+                    <div className='listingform__section'>
+                        <label className='listingform__label' htmlFor='sqft'>Sqft</label>
+                        <select className='listingform__select' name='sqft' onChange={e => onChange(e)} value={sqft}>
+                            <option>1000+</option>
+                            <option>1200+</option>
+                            <option>1500+</option>
+                            <option>2000+</option>
+                            <option>Any</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div className='col-1-of-6'>
+
+                    <div className='listingform__section'>
                         <label className='listingform__label' htmlFor='days_listed'>Days Listed</label>
                         <select className='listingform__select' name='days_listed' onChange={e => onChange(e)} value={days_listed}>
                             <option>1 of less</option>
@@ -97,17 +165,7 @@ const ListingForm = (props) => {
                 </div>
 
                 <div className='col-1-of-6'>
-                    <div className='listingform__section'>
-                        <label className='listingform__label' htmlFor='bedrooms'>Bedrooms</label>
-                        <select className='listingform__select' name='bedrooms' onChange={e => onChange(e)} value={bedrooms}>
-                            <option>0+</option>
-                            <option>1+</option>
-                            <option>2+</option>
-                            <option>3+</option>
-                            <option>4+</option>
-                            <option>5+</option>
-                        </select>
-                    </div>
+
                     <div className='listingform__section'>
                         <label className='listingform__label' htmlFor='has_photos'>Has Photos</label>
                         <select className='listingform__select' name='has_photos' onChange={e => onChange(e)} value={has_photos}>
@@ -121,31 +179,7 @@ const ListingForm = (props) => {
                 </div>
 
                 <div className='col-1-of-6'>
-                    <div className='listingform__section'>
-                        <label className='listingform__label' htmlFor='home_type'>Home Type</label>
-                        <select className='listingform__select' name='home_type' onChange={e => onChange(e)} value={home_type}>
-                            <option>House</option>
-                            <option>Condo</option>
-                            <option>Townhouse</option>
-                        </select>
-                    </div>
-                    <div className='listingform__section'>
-                        <label className='listingform__label' htmlFor='keywords'>Keywords</label>
-                        <input className='listingform__input' name='keywords' type='text' onChange={e => onChange(e)} value={keywords} />
-                    </div>
-                </div>
 
-                <div className='col-1-of-6'>
-                    <div className='listingform__section'>
-                        <label className='listingform__label' htmlFor='bathrooms'>Baths</label>
-                        <select className='listingform__select' name='bathrooms' onChange={e => onChange(e)} value={bathrooms}>
-                            <option>0+</option>
-                            <option>1+</option>
-                            <option>2+</option>
-                            <option>3+</option>
-                            <option>4+</option>
-                        </select>
-                    </div>
                     <div className='listingform__altsection'>
                         <label className='listingform__label' htmlFor='open_house'>Open Houses</label>
                         <input className='listingform__checkbox' name='open_house' type='checkbox' onChange={e => onChange(e)} value={open_house} />
@@ -153,16 +187,27 @@ const ListingForm = (props) => {
                 </div>
 
                 <div className='col-1-of-6'>
+
+                    <div className='listingform__section'>
+                        <label className='listingform__label' htmlFor='keywords'>Keywords</label>
+                        <input className='listingform__input' name='keywords' type='text' onChange={e => onChange(e)} value={keywords} />
+                    </div>
+                </div>
+
+
+
+                <div className='col-1-of-6'>
                     {loading ?
                         <div className='listingform__loader'>
-                            <Loader
+                            <Audio
                                 type="Oval"
                                 color="#424242"
                                 height={50}
-                                width={50}
+                                 width={50}
+                                timeout={50}
                             />
-                        </div> : 
-                        <button className='listingform__button listingform__button--primary'>Save</button>
+                        </div> :
+                        <button className='listingform__button listingform__button--primary' onClick={bhagwaan}>Save</button>
                     }
                 </div>
             </div>
