@@ -27,7 +27,7 @@ const ListingForm = (props) => {
     const bhagwaan = () => {
         // e.preventDefault();
         console.log(formData)
-
+            
         const config = {
             headers: {
                 'Content-Type': 'application/json'
@@ -81,7 +81,7 @@ const ListingForm = (props) => {
 
     };
 
-
+    //Below is Listing form which capture data from user and sends to function bhagwaan after submit
 
     return (
         <form className='listingform'>

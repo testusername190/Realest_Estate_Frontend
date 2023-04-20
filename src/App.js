@@ -12,6 +12,7 @@ import NotFound from './components/NotFound';
 import './sass/main.scss';
 import {Provider} from 'react-redux';
 import store from './store';
+import PrivateRoute from './components/privateRoute';
 
  
 
