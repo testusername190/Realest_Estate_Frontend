@@ -19,7 +19,7 @@ FROM node:12-alpine
 # Layer 2: Telling Docker to create a directory called `/frontend` in the container and set it as the working directory.
 WORKDIR /frontend
 
-# Layer 3: Copying the package.json file from the root of the project to the `app` directory in the container.
+# Layer 3: Copying the package.json file from the root of the project to the `frontend` directory in the container.
 COPY ./package.json ./
 COPY ./package-lock.json ./
 
